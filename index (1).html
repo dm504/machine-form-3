@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Machine Status</title>
+<style>
+  :root {
+    --ink: #1c1f24;
+    --sub: #6b7280;
+    --line: #e2e5e9;
+    --panel: #ffffff;
+    --bg: #f3f4f6;
+    --accent: #1f6feb;
+    --go: #1a9e5c;
+    --go-dark: #157a48;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink);
+    padding: 0 0 40px;
+  }
+  header {
+    background: var(--ink);
+    color: #fff;
+    padding: 20px 20px 18px;
+  }
+  header .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #9aa4b2;
+    margin: 0 0 4px;
+  }
+  header h1 {
+    font-size: 20px;
+    margin: 0;
+    font-weight: 600;
+  }
+  main {
+    max-width: 420px;
+    margin: 18px auto 0;
+    padding: 0 16px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .field {
+    margin-bottom: 18px;
+  }
+  .field:last-child { margin-bottom: 0; }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sub);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  select, input[type=text] {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--ink);
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  select:focus, input[type=text]:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(31,111,235,0.15);
+  }
+  .team-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .team-row input { display: none; }
+  .team-row label.opt {
+    text-align: center;
+    padding: 12px 0;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--sub);
+    text-transform: none;
+    letter-spacing: normal;
+    cursor: pointer;
+  }
+  .team-row input:checked + label.opt {
+    border-color: var(--accent);
+    background: rgba(31,111,235,0.08);
+    color: var(--accent);
+  }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236b7280'%3E%3Cpath d='M5.5 7.5L10 12l4.5-4.5H5.5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 18px;
+    padding-right: 36px;
+  }
+  button.submit {
+    width: 100%;
+    margin-top: 22px;
+    padding: 16px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--go);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  button.submit:active { background: var(--go-dark); }
+  button.submit[disabled] {
+    background: #a9b0ba;
+    cursor: not-allowed;
+  }
+  #status {
+    margin-top: 14px;
+    font-size: 14px;
+    text-align: center;
+    min-height: 18px;
+  }
+  #status.ok { color: var(--go-dark); font-weight: 600; }
+  #status.err { color: #b3261e; font-weight: 600; }
+  #status.busy { color: var(--sub); }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Shop floor update</p>
+  <h1>Machine status</h1>
+</header>
+
+<main>
+  <div class="card">
+
+    <div class="field">
+      <label>Team</label>
+      <div class="team-row">
+        <input type="radio" name="team" id="teamA" value="A" checked>
+        <label class="opt" for="teamA">A</label>
+        <input type="radio" name="team" id="teamB" value="B">
+        <label class="opt" for="teamB">B</label>
+        <input type="radio" name="team" id="teamC" value="C">
+        <label class="opt" for="teamC">C</label>
+        <input type="radio" name="team" id="teamD" value="D">
+        <label class="opt" for="teamD">D</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="machineName">Machine name</label>
+      <select id="machineName">
+        <option value="BCS">BCS</option>
+        <option value="BCS Liner">BCS Liner</option>
+        <option value="BCS Hemming">BCS Hemming</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="machineNo">Machine no.</label>
+      <input type="text" id="machineNo" inputmode="numeric" placeholder="e.g. 04">
+    </div>
+
+    <div class="field">
+      <label for="machinePart">Machine part</label>
+      <select id="machinePart">
+        <option value="Roll Feeding Part">Roll Feeding Part</option>
+        <option value="Liner Part">Liner Part</option>
+        <option value="Cutting Part">Cutting Part</option>
+        <option value="Conveyor Part">Conveyor Part</option>
+      </select>
+    </div>
+
+    <button class="submit" id="submitBtn" onclick="submitForm()">Completed</button>
+    <p id="status"></p>
+
+  </div>
+</main>
+
+<script>
+function submitForm() {
+  var url = "PASTE_YOUR_WEB_APP_URL_HERE";
+  var btn = document.getElementById("submitBtn");
+  var statusEl = document.getElementById("status");
+
+  var machineNo = document.getElementById("machineNo").value.trim();
+  if (!machineNo) {
+    statusEl.className = "err";
+    statusEl.innerText = "Enter the machine number first";
+    return;
+  }
+
+  var payload = {
+    team: document.querySelector('input[name="team"]:checked').value,
+    machineName: document.getElementById("machineName").value,
+    machineNo: machineNo,
+    machinePart: document.getElementById("machinePart").value
+  };
+
+  btn.disabled = true;
+  statusEl.className = "busy";
+  statusEl.innerText = "Sending...";
+
+  fetch(url, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    statusEl.className = "ok";
+    statusEl.innerText = "Sent: " + data.message;
+    btn.disabled = false;
+  })
+  .catch(function() {
+    statusEl.className = "err";
+    statusEl.innerText = "Could not send. Check connection and try again.";
+    btn.disabled = false;
+  });
+}
+</script>
+
+</body>
+</html>
